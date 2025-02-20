@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>课堂表现</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* 页面整体容器 */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* 雷达图容器优化，放置在页面最上方 */
+    .radar-chart-container {
+      text-align: center;
+      margin-bottom: 30px; /* 给雷达图添加下边距 */
+      max-width: 500px; /* 限制雷达图的宽度 */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 课堂评价表单的容器 */
+    .form-container {
+      background-color: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* 评分输入框和文本框的优化 */
+    .form-group input[type="number"], .form-group textarea {
+      width: 100%;
+      max-width: 150px; /* 限制最大宽度，避免输入框过大 */
+      margin-bottom: 10px; /* 给每个输入框底部增加间距 */
+    }
+
+    .form-group {
+      margin-bottom: 15px; /* 让每个评分项之间有一定间距 */
+    }
+
+    /* 图片展示区域 */
+    .image-container {
+      margin-top: 30px;
+      text-align: center;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 20px;
+      min-height: 200px;
+      background-color: #f7f7f7;
+    }
+
+    .image-container img {
+      max-width: 100%;
+      height: auto;
+      max-height: 180px;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center">课堂表现 - {{ attendance.date }}</h2>
+    <!-- 雷达图展示 -->
+    <div class="radar-chart-container">
+        <canvas id="radarChart" width="400" height="400"></canvas>
+    </div>
+
+    <!-- 课堂评价表单 -->
+    <div class="form-container">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="focus">课堂专注</label>
+                <input type="number" name="focus" id="focus" class="form-control" min="1" max="5" value="{{ performance.focus|default:0 }}">
+            </div>
+
+            <div class="form-group">
+                <label for="logical_thinking">思维逻辑</label>
+                <input type="number" name="logical_thinking" id="logical_thinking" class="form-control" min="1" max="5" value="{{ performance.logical_thinking|default:0 }}">
+            </div>
+
+            <div class="form-group">
+                <label for="creativity">创新能力</label>
+                <input type="number" name="creativity" id="creativity" class="form-control" min="1" max="5" value="{{ performance.creativity|default:0 }}">
+            </div>
+
+            <div class="form-group">
+                <label for="expression">自我表达</label>
+                <input type="number" name="expression" id="expression" class="form-control" min="1" max="5" value="{{ performance.expression|default:0 }}">
+            </div>
+
+            <div class="form-group">
+                <label for="notes">教师备注</label>
+                <textarea name="notes" id="notes" class="form-control">{{ performance.notes }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">保存评价</button>
+        </form>
+    </div>
+
+    <!-- 图片展示区域 -->
+    <div class="image-container">
+        <p>课程相关图片：</p>
+        <!-- 可在此处替换图片 -->
+        <img src="your-image-url-here.jpg" alt="课程图片">
+    </div>
+</div>
+
+<script>
+    const data = {
+        labels: ['课堂专注', '思维逻辑', '创新能力', '自我表达'],
+        datasets: [{
+            label: '课堂表现评分',
+            data: [
+                {{ performance.focus }},
+                {{ performance.logical_thinking }},
+                {{ performance.creativity }},
+                {{ performance.expression }}
+            ],
+            backgroundColor: 'rgba(255, 99, 132, 0.2)', // 填充颜色
+            borderColor: 'rgba(255, 99, 132, 1)', // 边框颜色
+            borderWidth: 2
+        }]
+    };
+
+    const ctx = document.getElementById('radarChart').getContext('2d');
+    const radarChart = new Chart(ctx, {
+        type: 'radar',
+        data: data,
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    angleLines: {
+                        display: true, // 显示每个维度的角线
+                    },
+                    suggestedMin: 0, // 最小值
+                    suggestedMax: 5, // 最大值
+                    grid: {
+                        color: 'rgba(255, 99, 132, 0.2)', // 网格颜色
+                    },
+                    ticks: {
+                        beginAtZero: true, // 从零开始
+                        stepSize: 1, // 步长
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    position: 'top', // 图例位置
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)', // 提示框背景色
+                    bodyColor: '#fff', // 提示框文字颜色
+                    borderColor: '#fff', // 边框颜色
+                    borderWidth: 1,
+                    titleColor: '#fff' // 提示框标题文字颜色
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

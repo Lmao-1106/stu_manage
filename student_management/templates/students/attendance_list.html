@@ -1,0 +1,9 @@
+<!-- attendance_list.html -->
+<h2>{{ enrollment.course.name }} - 出勤记录</h2>
+
+{% for attendance in attendances %}
+    <div>
+        <p>{{ attendance.date }} - 出勤：{% if attendance.is_present %}是{% else %}否{% endif %}</p>
+        <a href="{% url 'classroom_performance_detail' attendance.id %}">查看{{ attendance.date }}的课堂评价</a>
+    </div>
+{% endfor %}

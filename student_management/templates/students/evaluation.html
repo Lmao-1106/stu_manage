@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scratch课程总结报告</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            max-width: 1000px;
+            margin: 10px auto;
+            background: #f9f9f9;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+
+        /* 封面页样式 */
+        .cover {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #3498db, #2c3e50);
+            color: white;
+            border-radius: 10px;
+        }
+        .cover h1 {
+            margin: 0;
+            font-size: 2.2em;
+            padding: 20px 0;
+        }
+        .cover-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 15px;
+            font-size: 0.95em;
+        }
+
+        /* 紧凑版块样式 */
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+        }
+        .section-title {
+            color: var(--primary-color);
+            margin: 0 0 12px 0;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .section-title i {
+            color: var(--secondary-color);
+            font-size: 1.1em;
+        }
+
+        /* 三栏布局 */
+        .columns-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .column {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+        }
+
+        /* 流程图图片展示 */
+        .flowchart-img {
+            width: 100%;
+            border: 2px dashed #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            margin: 10px 0;
+            min-height: 200px;
+            background: #fafafa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        /* 紧凑表单元素 */
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 80px;
+            font-size: 0.9em;
+            margin-top: 8px;
+        }
+        .checkbox-group {
+            margin: 8px 0;
+        }
+        .checkbox-group label {
+            display: block;
+            margin: 6px 0;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .columns-3 {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 15px;
+            }
+            .cover h1 {
+                font-size: 1.8em;
+            }
+        }
+
+
+        .radar-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .dimension-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .dimension-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .dimension-item label {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .dimension-range {
+            width: 60px;
+            padding: 3px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            text-align: center;
+        }
+
+        #radarChart {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        @media (max-width: 768px) {
+            #radarChart {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 封面页 -->
+        <div class="cover">
+            <h1>Scratch课程报告</h1>
+            <div class="cover-info">
+                <div>
+                    <p>课程主题：贪吃蛇(上)</p>
+                    <p>班级：周六编程12:30</p>
+                </div>
+                <div>
+                    <p>课程日期：2025-02-15</p>
+                    <p>课时编号：第1课</p>
+                </div>
+            </div>
+        </div>
+        <!-- 新增雷达图评价模块 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-chart-radar"></i>能力维度评价</h2>
+
+            <div class="radar-section">
+                <canvas id="radarChart"></canvas>
+
+                <div class="dimension-controls">
+                    <div class="dimension-item">
+                        <label>逻辑思维:</label>
+                        <input type="number" class="dimension-range"
+                               min="1" max="10" value="7" data-dimension="逻辑思维">
+                    </div>
+                    <div class="dimension-item">
+                        <label>创意设计:</label>
+                        <input type="number" class="dimension-range"
+                               min="1" max="10" value="5" data-dimension="创意设计">
+                    </div>
+                    <div class="dimension-item">
+                        <label>调试能力:</label>
+                        <input type="number" class="dimension-range"
+                               min="1" max="10" value="8" data-dimension="调试能力">
+                    </div>
+                    <div class="dimension-item">
+                        <label>时间管理:</label>
+                        <input type="number" class="dimension-range"
+                               min="1" max="10" value="6" data-dimension="时间管理">
+                    </div>
+                    <div class="dimension-item">
+                        <label>协作能力:</label>
+                        <input type="number" class="dimension-range"
+                               min="1" max="10" value="4" data-dimension="协作能力">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- 课堂目标 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-bullseye"></i>课堂目标</h2>
+            <div class="checkbox-group">
+                <label><input type="checkbox"> 回顾克隆指令的工作原理和使用方法</label>
+                <label><input type="checkbox"> 认识变量的概念，理解贪吃蛇身体长度变化的"脚印原理"</label>
+                <label><input type="checkbox"> 设计贪吃蛇碰到食物时的交互效果</label>
+            </div>
+        </div>
+
+        <!-- 流程图 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-project-diagram"></i>程序流程图</h2>
+            <div class="flowchart-img">
+                （点击上传或拖放流程图图片）
+            </div>
+        </div>
+
+        <!-- 三栏评价板块 -->
+        <div class="section">
+            <h2 class="section-title"><i class="fas fa-clipboard-check"></i>学习总结</h2>
+            <div class="columns-3">
+                <!-- 我的收获 -->
+                <div class="column">
+                    <h3 class="section-title"><i class="fas fa-star"></i>我的收获</h3>
+                    <textarea placeholder="记录学到的新知识和成功经验..."></textarea>
+                </div>
+
+                <!-- 遇到的困难 -->
+                <div class="column">
+                    <h3 class="section-title"><i class="fas fa-exclamation-triangle"></i>遇到的困难</h3>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> 代码调试</label>
+                        <label><input type="checkbox"> 逻辑理解</label>
+                        <label><input type="checkbox"> 时间管理</label>
+                    </div>
+                    <textarea placeholder="描述具体遇到的问题..."></textarea>
+                </div>
+
+                <!-- 下次挑战 -->
+                <div class="column">
+                    <h3 class="section-title"><i class="fas fa-flag"></i>下次挑战</h3>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox"> 添加计分系统</label>
+                        <label><input type="checkbox"> 设计多关卡</label>
+                        <label><input type="checkbox"> 优化角色动画</label>
+                    </div>
+                    <textarea placeholder="写下想要尝试的新功能..."></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const flowchartArea = document.querySelector('.flowchart-img');
+        flowchartArea.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    flowchartArea.innerHTML = `<img src="${e.target.result}" style="max-width:100%">`;
+                };
+                reader.readAsDataURL(file);
+            };
+            input.click();
+        });
+
+
+        // 雷达图初始化
+        const ctx = document.getElementById('radarChart').getContext('2d');
+        let radarChart;
+
+        function initRadarChart() {
+            const dimensions = Array.from(document.querySelectorAll('[data-dimension]'))
+                .map(input => ({
+                    dimension: input.dataset.dimension,
+                    value: parseInt(input.value)
+                }));
+
+            const data = {
+                labels: dimensions.map(d => d.dimension),
+                datasets: [{
+                    label: '能力维度评价',
+                    data: dimensions.map(d => d.value),
+                    backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                    borderColor: '#3498db',
+                    pointBackgroundColor: '#3498db',
+                    pointBorderColor: '#fff',
+                }]
+            };
+
+            const config = {
+                type: 'radar',
+                data: data,
+                options: {
+                    responsive: true,
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2,
+                                color: '#666',
+                                backdropColor: 'transparent'
+                            },
+                            grid: {
+                                color: 'rgba(0,0,0,0.05)'
+                            },
+                            pointLabels: {
+                                color: '#666',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    return `${context.dataset.label}: ${context.raw}/10`;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            if (radarChart) radarChart.destroy();
+            radarChart = new Chart(ctx, config);
+        }
+
+        // 绑定输入事件
+        document.querySelectorAll('.dimension-range').forEach(input => {
+            input.addEventListener('input', initRadarChart);
+        });
+
+        // 初始化图表
+        initRadarChart();
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,31 @@
+<!-- students/templates/base.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Student Management{% endblock title %}</title>
+  <!-- Bootstrap CSS (示例使用CDN引入，你也可下载到本地) -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+  >
+  <!-- 其他全局样式文件可在此处引入 -->
+  {% block extra_head %}{% endblock extra_head %}
+</head>
+<body>
+  <!-- 这里可以放置全局导航栏 -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">学生管理系统</a>
+      <!-- 这里可以添加一些导航链接，如主页、学生列表等 -->
+    </div>
+  </nav>
+
+  <div class="container">
+    {% block content %}{% endblock content %}
+  </div>
+
+  <!-- Bootstrap JS (如果需要可引入) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

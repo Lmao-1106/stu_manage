@@ -1,0 +1,68 @@
+<!-- students/templates/students/student_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ student.name }} - 详情
+{% endblock title %}
+
+{% block content %}
+<div class="row">
+  <!-- 左侧个人信息栏 -->
+  <div class="col-md-4">
+    <!-- 头像区域（可选） -->
+    <div class="text-center mb-3">
+      <!-- 如果有学生头像URL可放置在img标签中，这里仅作示例 -->
+      <img
+        src="../media/{{ student.avatar_url }}"
+        class="rounded-circle"
+        alt="Student Avatar"
+      >
+    </div>
+
+    <!-- 基本信息列表 -->
+    <div class="border p-3">
+      <h5 class="mb-3">基本信息</h5>
+      <p><strong>姓名：</strong>{{ student.name }}</p>
+      <p><strong>年龄：</strong>{{ student.age }}</p>
+      <p><strong>电话：</strong>{{ student.phone }}</p>
+      <p><strong>邮箱：</strong>{{ student.email }}</p>
+      <p><strong>链接：</strong>{{ student.avatar_url }}</p>
+      <!-- 你也可以添加更多字段，如地址、性别等 -->
+    </div>
+  </div>
+
+  <!-- 右侧内容栏：报课信息、详细记录等 -->
+  <div class="col-md-8">
+    <div class="border p-3">
+      <h5 class="mb-3">报课信息</h5>
+      {% if enrollments %}
+        <ul class="list-group">
+          {% for enrollment in enrollments %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <strong>课程：</strong>{{ enrollment.course.name }}<br>
+                <span class="text-muted">
+                  {{ enrollment.course.description|default_if_none:"暂无描述" }}
+                </span>
+              </div>
+              <span>
+                <strong>剩余课时：</strong>{{ enrollment.remaining_hours }}
+              </span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>暂无报课信息</p>
+      {% endif %}
+    </div>
+
+    <!-- 如果有出勤信息等，可以放在这里 -->
+    <!--
+    <div class="border p-3 mt-3">
+      <h5>出勤记录</h5>
+      {% comment %} 这里可循环输出 Attendance {% endcomment %}
+    </div>
+    -->
+  </div>
+</div>
+{% endblock content %}
